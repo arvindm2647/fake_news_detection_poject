@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .real {
+            background-color: #dff0d8;
+            border: 1px solid #d6e9c6;
+        }
+        .fake {
+            background-color: #f2dede;
+            border: 1px solid #ebccd1;
+        }
+        .error {
+            background-color: #fcf8e3;
+            border: 1px solid #faebcc;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .progress {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        .real-progress {
+            background-color: #5cb85c;
+        }
+        .fake-progress {
+            background-color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fake News Detector</h1>
+        {% if not model_loaded %}
+            <div class="error">
+                <p>Warning: Model not loaded. Please train the model first.</p>
+            </div>
+        {% endif %}
+        <p>Enter a news article below to check if it's likely to be fake or real:</p>
+        <textarea id="news_text" placeholder="Paste news article here..."></textarea>
+        <button onclick="predictNews()">Check News</button>
+        
+        <div id="result">
+            <h3>Result: <span id="prediction-text"></span></h3>
+            <p>Confidence: <span id="confidence"></span></p>
+            
+            <div class="progress-bar">
+                <div id="fake-progress" class="progress fake-progress" style="width: 0%"></div>
+            </div>
+            <p>Fake Probability: <span id="fake-prob"></span></p>
+            
+            <div class="progress-bar">
+                <div id="real-progress" class="progress real-progress" style="width: 0%"></div>
+            </div>
+            <p>Real Probability: <span id="real-prob"></span></p>
+            
+            <h4>Analyzed Text:</h4>
+            <p id="text-sample"></p>
+        </div>
+    </div>
+
+    <script>
+        function predictNews() {
+            const text = document.getElementById('news_text').value.trim();
+            if (!text) {
+                alert('Please enter some text to analyze');
+                return;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = '';
+            resultDiv.classList.add('loading');
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `news_text=${encodeURIComponent(text)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    resultDiv.className = 'error';
+                    resultDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                    return;
+                }
+
+                // Update UI with results
+                resultDiv.className = data.prediction.toLowerCase();
+                document.getElementById('prediction-text').textContent = data.prediction;
+                document.getElementById('confidence').textContent = 
+                    `${(data.confidence * 100).toFixed(2)}%`;
+                document.getElementById('fake-prob').textContent = 
+                    `${(data.probabilities.Fake * 100).toFixed(2)}%`;
+                document.getElementById('real-prob').textContent = 
+                    `${(data.probabilities.Real * 100).toFixed(2)}%`;
+                document.getElementById('text-sample').textContent = data.text_sample;
+                
+                // Update progress bars
+                document.getElementById('fake-progress').style.width = 
+                    `${data.probabilities.Fake * 100}%`;
+                document.getElementById('real-progress').style.width = 
+                    `${data.probabilities.Real * 100}%`;
+            })
+            .catch(error => {
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+            });
+        }
+    </script>
+</body>
+</html>

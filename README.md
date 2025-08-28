@@ -101,7 +101,7 @@ fake-news-detection/
 
 ---
 
-## 🛠 Technologies Used
+##  Technologies Used
 
 - Python
 - Scikit-learn

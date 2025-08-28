@@ -1,10 +1,10 @@
-# 📰 Fake News Detection using Machine Learning
+#  Fake News Detection using Machine Learning
 
 A machine learning project that detects whether a given news article is **real** or **fake** based on its content. This project leverages natural language processing (NLP) techniques and classification algorithms to classify news articles effectively.
 
 ---
 
-## 📌 Features
+##  Features
 
 - Text preprocessing and vectorization using TF-IDF
 - Binary classification using models like Logistic Regression, Naive Bayes, or Random Forest
@@ -13,7 +13,7 @@ A machine learning project that detects whether a given news article is **real**
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Clone the repository
 
@@ -38,7 +38,7 @@ Place your CSV dataset in the root folder as `news.csv`.
 
 ---
 
-## 🧠 Model Training
+##  Model Training
 
 To train the model:
 
@@ -55,7 +55,7 @@ This script will:
 
 ---
 
-## 📊 Model Evaluation
+## Model Evaluation
 
 After training, you can evaluate the model using:
 
@@ -70,7 +70,7 @@ This script will output:
 
 ---
 
-## 🌐 Web App (Optional)
+##  Web App (Optional)
 
 To run the web app using Streamlit:
 
@@ -82,7 +82,7 @@ Upload or enter the news text, and it will predict whether it's **Fake** or **Re
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 fake-news-detection/
@@ -112,19 +112,19 @@ fake-news-detection/
 
 ---
 
-## ✅ Example
+##  Example
 
 ```
 Input:
 "Donald Trump says vaccines cause autism in children"
 
 Prediction:
-❌ FAKE
+ FAKE
 ```
 
 ---
 
-## 📌 Future Improvements
+##  Future Improvements
 
 - Use deep learning (LSTM/BERT)
 - Improve UI and mobile support
@@ -133,19 +133,19 @@ Prediction:
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## ✨ Acknowledgements
+##  Acknowledgements
 
 - [Scikit-learn Documentation](https://scikit-learn.org/)
 - [Kaggle Datasets](https://www.kaggle.com/)
